@@ -1,25 +1,25 @@
 ---
-title: 'Reproducible Research: Peer Assessment 1'
+title: "E.coli Direct Bioassay"
+author: "Thillai Chidambaram P"
+date: "16 January 2016"
 output:
+  pdf_document:
+    toc: yes
   html_document:
-    keep_md: yes
-  pdf_document: default
+    theme: united
+    toc: yes
 ---
 
 
 ## Loading and preprocessing the data
 ```{r}
 rrdata<-read.csv("activity.csv", header = T, sep =",")
-View(rrdata)
-head(rrdata)
-
 ## What is mean total number of steps taken per day?
-rrdata$date<-as.Date(rrdata$date, formate = "%d-%m-%y")
+##rrdata$date<-as.Date(rrdata$date, formate = "%d-%m-%y")
 rrdata$interval<-as.factor(rrdata$interval)
 meanrrdata <- aggregate(steps ~ date, rrdata, sum)
-View(meanrrdata)
-library(ggplot2)
 
+library(ggplot2)
 plot(meanrrdata$date, meanrrdata$steps)
 plot1<-ggplot(meanrrdata, aes(x= steps))+geom_histogram(fill = "purple", binwidth = 1500)+labs(title = "Steps Taken For the Given Period", x= "No of Steps/Day", y= "No. of intervals")
 png("plot1.png")
@@ -34,7 +34,9 @@ print(plot2)
 dev.off()
 ## Imputing missing values
 missingValue<-sum(is.na(rrdata$steps))
-View(missingValue)
-
+impute1<-rrdata$steps
+rrdatamean<-mean(rrdata$steps, na.rm = TRUE)
+rrdata$steps[which(is.na(rrdata$steps))]<-rrdatamean
+View(rrdata)
 ## Are there differences in activity patterns between weekdays and weekends?
 ```
